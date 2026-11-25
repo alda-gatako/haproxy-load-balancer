@@ -45,5 +45,14 @@
   </main>
 
   <script src="app.js"></script>
+  <footer id="serverInfo"></footer>
+  <script>
+    fetch('/health')
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('serverInfo').textContent = 'Served by: ' + d.server;
+      })
+      .catch(() => {});
+  </script>
 </body>
 </html>
