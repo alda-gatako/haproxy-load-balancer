@@ -131,4 +131,34 @@ Visit \*\*http://localhost:8080\*\* — this is the load balancer's address. Eve
 \## Author
 
 Gatakokabasinga Alda — \[@alda-gatako](https://github.com/alda-gatako)
+## Overview
+Dev Portfolio Analyzer is a web app that looks up a GitHub user's public repos. It runs as two Node.js containers behind an HAProxy load balancer.
 
+## Architecture
+Client -> lb01 (HAProxy, port 8080) -> web01 / web02 (Node, port 3000)
+
+## Prerequisites
+- Docker Desktop
+- Git
+
+## Setup
+Create a file named `server/.env` containing:
+PORT=3000
+(It is not stored in the repo.)
+
+## Run
+docker compose up --build -d
+Then open http://localhost:8080
+
+## Test
+1. Run `curl.exe http://localhost:8080` several times.
+2. Run `docker compose logs --tail 20`. Requests alternate between web01 and web02.
+3. Run `docker stop web01`, then request the site again. web02 keeps answering.
+4. Run `docker start web01` to bring it back.
+
+## Known behavior
+The first request right after stopping a server can return a brief 503 while HAProxy detects the failure.
+
+## Troubleshooting
+- Container name conflict: run `docker rm -f web01 web02 lb01`, then run again.
+- "no such host" while building: check your internet connection or try another network.
