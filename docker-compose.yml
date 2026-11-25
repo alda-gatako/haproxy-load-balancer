@@ -2,6 +2,7 @@ services:
   web01:
     build: .
     container_name: web01
+    restart: unless-stopped
     env_file:
       - ./server/.env
     environment:
